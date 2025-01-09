@@ -1,55 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Glow</title>
-    <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-            font-family: Arial, sans-serif;
-            color: white;
-            background: radial-gradient(circle, #000000, #0b0b3a, #000000);
-        }
-
-        canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-
-        .content {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            text-align: center;
-            z-index: 1;
-        }
-
-        h1 {
-            font-size: 4rem;
-            color: white;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
-        }
-
-        p {
-            font-size: 1.2rem;
-            color: rgba(255, 255, 255, 0.7);
-        }
-    </style>
-</head>
-<body>
-    <canvas id="background"></canvas>
-    <div class="content">
-        <div>
-            <h1>Discover the Glow</h1>
-            <p>Move your mouse to interact with the glowing particles.</p>
-        </div>
+<div style="position: relative; width: 100%; height: 100%; overflow: hidden;">
+    <canvas id="background" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></canvas>
+    <div style="position: relative; z-index: 1; text-align: center; color: white; font-family: Arial, sans-serif;">
+        <h1 style="font-size: 2rem; text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);">
+            Discover the Glow
+        </h1>
+        <p style="font-size: 1rem; color: rgba(255, 255, 255, 0.7);">
+            Move your mouse to interact with the glowing particles.
+        </p>
     </div>
     <script>
         const canvas = document.getElementById("background");
@@ -60,8 +17,8 @@
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         }
-        window.addEventListener("resize", resizeCanvas);
         resizeCanvas();
+        window.addEventListener("resize", resizeCanvas);
 
         const particles = [];
         const colors = ["255, 106, 0", "0, 230, 255", "255, 0, 255", "90, 255, 21", "255, 235, 59"];
@@ -116,5 +73,4 @@
 
         animate();
     </script>
-</body>
-</html>
+</div>
