@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Button SPA</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: black;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            overflow: hidden; /* Prevent scrolling initially */
+        }
+
+        #button-container {
+            text-align: center;
+        }
+
+        .start-button {
+            width: 20vw; /* Responsive sizing */
+            height: 20vw; /* Keep button square */
+            max-width: 150px; /* Cap size for larger screens */
+            max-height: 150px;
+            background: radial-gradient(circle, #ff8c00, #ff4500);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 4vw; /* Font size adapts to screen */
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.8s, box-shadow 0.3s;
+            display: flex; /* Center text */
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .start-button:hover {
+            transform: scale(1.3);
+            box-shadow: 0 0 20px #ff4500;
+        }
+
+        .start-button:active {
+            transform: scale(0.8);
+        }
+
+        #scroll-text {
+            display: none;
+            margin-top: 20px;
+            font-size: 20px;
+            color: #ff4500;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        #photo-grid {
+            display: none; /* Initially hidden */
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-auto-rows: 280px;
+        }
+
+        .photo {
+            width: 120px;
+            height: 280px;
+            background-size: cover;
+            background-position: center;
+            margin: auto;
+            border: 2px solid #ff4500;
+            box-shadow: 0 0 10px #ff4500;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .photo:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px #ff8c00;
+        }
+    </style>
+</head>
+<body>
+    <audio id="background-music" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+
+    <div id="button-container">
+        <button class="start-button" id="start-button">Click to Start</button>
+    </div>
+    <div id="scroll-text">Scroll to adjust speed...</div>
+    <div id="photo-grid"></div>
+
+    <script>
+        const buttonContainer = document.getElementById("button-container");
+        const scrollText = document.getElementById("scroll-text");
+        const music = document.getElementById("background-music");
+        const photoGrid = document.getElementById("photo-grid");
+        const startButton = document.getElementById("start-button");
+
+        let scrollSpeed = 1;
+        let animationInterval;
+
+        // Start the experience
+        startButton.addEventListener("click", () => {
+            playMusic();
+            hideElement(buttonContainer);
+
+            setTimeout(() => {
+                showElement(scrollText);
+                document.body.style.overflow = "auto"; // Enable scrolling
+            }, 1000);
+        });
+
+        // Play background music
+        function playMusic() {
+            music.play().catch((error) => {
+                console.error("Music playback blocked:", error);
+            });
+            music.volume = 0.5;
+        }
+
+        // Load photo grid on first scroll
+        window.addEventListener("scroll", () => {
+            if (scrollText.style.display === "block") {
+                loadPhotoGrid();
+                scrollText.style.display = "none";
+            }
+        });
+
+        // Adjust photo grid scroll speed dynamically
+        window.addEventListener("scroll", () => {
+            if (photoGrid.style.display === "grid") {
+                scrollSpeed = Math.max(1, window.scrollY / 100);
+            }
+        });
+
+        // Load and animate the photo grid
+        function loadPhotoGrid() {
+            showElement(photoGrid);
+            populatePhotoGrid();
+            startAnimation();
+        }
+
+        function populatePhotoGrid() {
+            for (let i = 0; i < 50; i++) {
+                const photo = document.createElement("div");
+                photo.classList.add("photo");
+                photo.style.backgroundImage = `url('https://picsum.photos/120/280?random=${i}')`;
+                photoGrid.appendChild(photo);
+            }
+        }
+
+        function startAnimation() {
+            let scrollY = 0;
+            animationInterval = setInterval(() => {
+                scrollY += scrollSpeed;
+                photoGrid.style.transform = `translateY(${-scrollY}px)`;
+
+                if (scrollY >= 280 * 50) {
+                    scrollY = 0;
+                }
+            }, 30);
+        }
+
+        // Utility functions
+        function showElement(element) {
+            element.style.display = "block";
+        }
+
+        function hideElement(element) {
+            element.style.display = "none";
+        }
+    </script>
+</body>
+</html>
